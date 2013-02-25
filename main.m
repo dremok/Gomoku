@@ -7,7 +7,7 @@ doDisplay = 1;
 
 players   = {'ALE','MAX','JOH'};
 % playerFun = {@aleFun,@maxFun,@johFun}; % when we have all functions
-playerFun = {@maxFun,@maxFun2,@johFun}; % for now all players use johFun
+playerFun = {@maxFun,@maxFun2,@maxFun}; % for now all players use johFun
 
 % randomize playing order
 p2players = randperm(3);

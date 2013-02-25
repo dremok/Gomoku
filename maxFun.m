@@ -104,11 +104,9 @@ for i = 2:16
     end
 end
 
-
-
+% Just place next to any other own stones
 mveI = 0;
 moves = zeros(2,1);
-
 for i=1:19
     for j=1:19
         if board(i,j) == p

@@ -65,7 +65,7 @@ for i = 1:16
     end
 end
 
-% Search for straight fours
+% Search for opponent straight fours
 for i = 1:16
     for j = 1:16
         if board(i,j) ~= p && board(i,j) ~= 0
@@ -105,7 +105,7 @@ for i = 1:16
     end
 end
 
-% Search for open threes
+% Search for opponent open threes
 for i = 2:16
     for j = 2:16
         if board(i, j) ~= 0 && board(i, j) ~= p
@@ -129,12 +129,13 @@ for i = 2:16
     end
 end
 
-% Search threat space
-
+% Search threat space for best move
 bestScore = 0;
-
 for i=1:19
     for j=1:19
+        if board(i,j) ~= 0
+            continue
+        end
         tmpBoard = board;
         tmpBoard(i,j) = p;
         score = evalBoard(tmpBoard,p);
@@ -145,15 +146,64 @@ for i=1:19
         end 
     end
 end
+if bestScore > 0
+    return
+end
 
-if bestScore == 0
-    k1 = randi(19,1);
-    k2 = randi(19,1);
-
-    while board(k1,k2) ~= 0
-        k1 = randi(19,1);
-        k2 = randi(19,1);
+% Place next to any other own stone
+mveI = 0;
+moves = zeros(2,1);
+for i=1:19
+    for j=1:19
+        if board(i,j) == p
+            if i > 1 && j > 1 && board(i-1,j-1) == 0
+                k1 = i-1;
+                k2 = j-1;
+                mveI = mveI + 1;
+                moves(:,mveI) = [k1 k2];
+            end
+            if i < 19 && j < 19 && board(i+1,j+1) == 0
+                k1 = i+1;
+                k2 = j+1;
+                mveI = mveI + 1;
+                moves(:,mveI) = [k1 k2];
+            end
+            if i > 1 && board(i-1,j) == 0
+                k1 = i-1;
+                k2 = j;
+                mveI = mveI + 1;
+                moves(:,mveI) = [k1 k2];
+            end
+            if j > 1 && board(i,j-1) == 0
+                k1 = i;
+                k2 = j-1;
+                mveI = mveI + 1;
+                moves(:,mveI) = [k1 k2];
+            end
+            if i < 19 && board(i+1,j) == 0
+                k1 = i+1;
+                k2 = j;
+                mveI = mveI + 1;
+                moves(:,mveI) = [k1 k2];
+            end
+            if j < 19 && board(i,j+1) == 0
+                k1 = i;
+                k2 = j+1;
+                mveI = mveI + 1;
+                moves(:,mveI) = [k1 k2];
+            end
+        end
     end
 end
+if mveI > 0
+    ii = randi(mveI);
+    k1 = moves(1,ii);
+    k2 = moves(2,ii);
+    return
+end
+
+% Place randomly
+k1 = randi(19,1);
+k2 = randi(19,1);
 
 end
